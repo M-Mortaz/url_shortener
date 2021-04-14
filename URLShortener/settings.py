@@ -27,8 +27,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = []  # set on the deployment step.
 
-# Application definition
-
 INSTALLED_APPS = [
     # Django built-in apps:
     'django.contrib.admin',
@@ -45,7 +43,8 @@ INSTALLED_APPS = [
     'django_extensions',  # tools
 
     # Internal apps:
-
+    "apps.core",
+    "apps.shortener",
 ]
 
 MIDDLEWARE = [
@@ -167,7 +166,7 @@ LOGGING = {
     },
 }
 
-STATIC_URL = os.getenv('URL_SHORTENER_STATIC_URL', '/static/')
+STATIC_URL = os.getenv('URL_SHORTENER_STATIC_URL', 'static/')
 STATIC_ROOT = os.getenv('URL_SHORTENER_STATIC_ROOT', os.path.join(BASE_DIR, STATIC_URL))
 
 MEDIA_URL = os.getenv('URL_SHORTENER_MEDIA_URL', 'media/')
