@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework import generics
 
-# Create your views here.
+
+class URLShortenerCreateListView(generics.ListCreateAPIView):
+    pass
+
+
+class URLShortenerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    pass
