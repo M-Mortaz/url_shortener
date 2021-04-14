@@ -1,0 +1,13 @@
+# python virtual environments
+env
+venv
+
+# runtime files/logs/DB
+*.log
+*.sqlite
+
+# ide/text editor
+__pycache__
+.vscode
+.idea
+
