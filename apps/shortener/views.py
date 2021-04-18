@@ -25,3 +25,6 @@ class URLShortenerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIVie
     queryset = URL.objects.all()
     lookup_field = "id"
     lookup_url_kwarg = "url_id"
+
+    def get_serializer_context(self):
+        return {"url_id": self.kwargs["url_id"]}

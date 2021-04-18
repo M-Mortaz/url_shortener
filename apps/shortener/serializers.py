@@ -19,12 +19,21 @@ class URLSerializer(serializers.ModelSerializer):
         Returns:
             str: Validate short_url
         """
+        url_id = self.context["url_id"]  # just in update mode we have id.
+        short_url = get_short_url(value)
+
+        try:
+            old_short_url = URL.objects.get(id=url_id).short_url
+        except URL.DoesNotExist:
+            raise serializers.ValidationError("url does not exists!")
+
+        if url_id and old_short_url == short_url:  # for update step old and new short_value could be same.
+            return short_url
+
         if value and url_validator(value):
             raise serializers.ValidationError(
                 "custom short_url could not be URL itself.Please try for sequence of string instead of a valid URL!"
             )
-
-        short_url = get_short_url(value)
 
         if URL.objects.filter(short_url=short_url).exists():
             raise serializers.ValidationError("url with this short url already exists.")
