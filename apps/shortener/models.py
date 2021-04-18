@@ -30,3 +30,51 @@ class URL(models.Model):
     update_at = models.DateTimeField(auto_now=True)
 
     objects = URLManager()
+
+    @staticmethod
+    def create_short_url() -> str:
+        """
+        Create short url from original url.
+        Note: This method will try for 5 times in a row to create a 5-character pass that is unique and does not exist
+         in the database. If the unique pass is not generated in these 5 times, it will try to generate 6, 7, and 8 to
+         100 characters next time.
+        Returns:
+            str: short url.
+        Raises:
+            Exception: If all of our try for generating unique url failed.This raise it is not possible in the normal
+             situation
+        """
+        # import hashlib
+        # return hashlib.sha1(url.encode("UTF-8")).hexdigest()[:settings.SHORTENER_MIN_HASH_LENGTH]
+        for _ in range(100):
+            for i in range(5):
+                short_url = create_random_string(i)
+                if not URL.objects.filter(short_url=short_url).exists():
+                    # we achieved to our short url so exit from method and loop.
+                    return short_url
+        else:
+            raise Exception(f"It is not possible to create unique short URL!")
+
+    @staticmethod
+    def add_url_to_redis(url: str, url_shortener: str) -> None:
+        """
+        Adding original and short URL to the redis for better performance on the redirect part.
+
+        Note:
+            Since this method responsible for increasing performance, if any error occurs we just log it as a warning
+             and not raising any error/exception.
+        Args:
+            url: original url
+            url_shortener: short url
+
+        Returns:
+            None
+
+        Raises:
+            None
+        """
+        try:
+            if redis_client.get(url_shortener) is None:
+                redis_client.set(url_shortener, url)
+        except Exception as e:
+            logger.warning(f"The error occurs in the redis during adding url. the error is {e}")
