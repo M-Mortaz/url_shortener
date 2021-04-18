@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+from urllib import parse
 from apps.shortener.utils import create_random_string
 from URLShortener.redis import redis_client
 import logging
@@ -8,16 +10,17 @@ logger = logging.getLogger("__name__")
 
 class URLManager(models.Manager):
     def create(self, **kwargs):
-        url = kwargs.get("url")
-        if not (url and isinstance(url, str)):
+        base_domain = settings.BASE_DOMAIN
+        orig_url = kwargs.get("original_url")
+        if not (orig_url and isinstance(orig_url, str)):
             raise ValueError(f"URL should be string.")
         short_url = URL.create_short_url()
         url_obj = self.model(
-            short_url=short_url,
+            short_url=parse.urljoin(base_domain, short_url),
             **kwargs
         )
         url_obj.save(using=self._db)
-        URL.add_url_to_redis(url=url, url_shortener=short_url)
+        URL.add_url_to_redis(url=orig_url, url_shortener=short_url)
         return url_obj
 
 
