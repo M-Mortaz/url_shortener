@@ -77,17 +77,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'URLShortener.wsgi.application'
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'rest_framework.permissions.IsAuthenticated',
-#     ),
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-#         'rest_framework.authentication.SessionAuthentication',
-#     ),
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-#     'PAGE_SIZE': 30
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 30
+}
 
 CELERY_BROKER_URL = os.getenv('URL_SHORTENER_CELERY_BROKER_URL',
                               'amqp://url_shortener:url_shortener@localhost:5672/url_shortener_vhost')
