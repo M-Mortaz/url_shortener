@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # Internal apps:
     "apps.core",
     "apps.shortener",
+    "apps.redirect"
 ]
 
 MIDDLEWARE = [
