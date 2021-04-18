@@ -172,4 +172,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SHORTENER_MIN_HASH_LENGTH = 5
 
 # The base domain for shorted url.
-BASE_DOMAIN = os.getenv("BASE_DOMAIN", "http://localhost:8000/")
+BASE_DOMAIN = os.getenv("BASE_DOMAIN", "http://localhost:8000/r1/")
