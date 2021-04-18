@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     # External apps:
     'rest_framework',
     # 'oauth2_provider',
-    'corsheaders',  # handing CORS
+    'corsheaders',  # handling CORS
     'django_extensions',  # tools
 
     # Internal apps:
@@ -175,3 +175,5 @@ if not os.path.isdir(MEDIA_ROOT):
     os.mkdir(MEDIA_ROOT)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SHORTENER_MIN_HASH_LENGTH = 5
