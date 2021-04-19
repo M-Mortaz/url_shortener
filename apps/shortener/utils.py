@@ -1,72 +1,31 @@
 import random
 import string
-from urllib import parse
-
-from django.conf import settings
 
 
-def create_random_string(inc: int = 0) -> str:
-    """
-    create random string. the length depends on the input argument inc. the minimum length will be set to
-     the SHORTENER_MIN_HASH_LENGTH variable in the django settings or environments variable.
-    Args:
-        inc (int): Excess amount over the minimum length of the shortener min hash length.
-    Returns:
-        str: a string with `default_min_length+inc` character sequence
-    """
-    sequence = string.ascii_letters + string.digits
-    return ''.join(random.choices(sequence, k=settings.SHORTENER_MIN_HASH_LENGTH + inc))
+def id_to_short_url(id):
+    map = string.ascii_letters + string.digits
+    short_url = ""
+
+    # for each digit find the base 62
+    while id > 0:
+        short_url += map[id % 62]
+        id //= 62
+
+    # reversing the shortURL
+    return short_url[len(short_url):: -1]
 
 
-def get_short_url(client_custom_short_url: str = None) -> str:
-    """
-    This function will choose we need create a sequence of string for shorted url or not.
-    if the client send us a short url itself so we don't need to generate it.
-    Args:
-        client_custom_short_url(str|None): The custom clients suffix shorted url.
-
-    Returns:
-        str: valid shorted_url which joined based url and shorted url together.
-    """
-    return __create_short_url(client_custom_short_url) if client_custom_short_url else create_short_url()
-
-
-def create_short_url() -> str:
-    """
-    Create unique short url.
-    Note: This method will try for 5 times in a row to create a 5-character pass that is unique and does not exist
-     in the database. If the unique pass is not generated in these 5 times, it will try to generate 6, 7, and 8 to
-     100 characters next time.
-    Returns:
-        str: short url.
-    Raises:
-        Exception: If all of our try for generating unique url failed.This raise it is not possible in the normal
-         situation
-    """
-    # import hashlib
-    # return hashlib.sha1(url.encode("UTF-8")).hexdigest()[:settings.SHORTENER_MIN_HASH_LENGTH]
-    from apps.shortener.models import URL
-    for _ in range(100):
-        for i in range(5):
-            short_url = create_random_string(i)
-            if not URL.objects.filter(short_url=short_url).exists():
-                # we achieved to our short url so exit from method and loop.
-                return __create_short_url(short_url=short_url)
-    else:
-        raise Exception(f"It is not possible to create unique short URL!")
-
-
-def __create_short_url(short_url: str) -> str:
-    """
-    Attaching the short url to the default domain.
-    Args:
-        short_url(str): a shorted url.
-
-    Returns:
-        str: valid short_url.
-    """
-    base_domain = settings.BASE_DOMAIN
-    return parse.urljoin(base_domain, short_url)
+def short_url_to_id(short_url):
+    id = 0
+    for i in short_url:
+        val_i = ord(i)
+        if ord('a') <= val_i <= ord('z'):
+            id = id * 62 + val_i - ord('a')
+        elif ord('A') <= val_i <= ord('Z'):
+            id = id * 62 + val_i - ord('Z') + 26
+        else:
+            id = id * 62 + val_i - ord('0') + 52
+    return id
 
 
 def url_validator(url: str) -> bool:
