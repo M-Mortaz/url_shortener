@@ -1,7 +1,7 @@
 version: '3'
 services:
   django:
-    container_name: URLShortener
+    container_name: URLShortener_container
     build: .
     restart: always
     command: /bin/bash /dockerize_conf/django_entry_point.sh
@@ -17,7 +17,7 @@ services:
 
   db:
     container_name: postgres
-    image: postgres
+    image: pg_container
     environment:
       POSTGRES_PASSWORD: postgres
     ports:
@@ -27,7 +27,7 @@ services:
 
 
   nginx:
-    container_name: nginx-container
+    container_name: nginx_container
     build: dockerize_conf/nginx
     restart: always
     ports:

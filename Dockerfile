@@ -15,6 +15,6 @@ RUN mkdir -p /logs/django/
 #Copy source codes and make shared directory
 RUN mkdir -p /socket
 
-ADD ./ /docker_api/
+ADD ./ .
 
 
