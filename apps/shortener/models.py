@@ -13,8 +13,9 @@ class URLManager(models.Manager):
     def create(self, **kwargs):
         url_obj = self.model(**kwargs)
         url_obj.save(using=self._db)
-        url_obj.short_url = id_to_short_url(url_obj.id)
-        url_obj.save()
+        if not kwargs.get("short_url"):
+            url_obj.short_url = id_to_short_url(url_obj.id)
+            url_obj.save()
         set_url_details_redis(
             original_url=url_obj.original_url,
             short_url=url_obj.short_url,
