@@ -39,9 +39,6 @@ class URLSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "custom short_url could not be URL itself.Please try for sequence of string instead of a valid URL!"
             )
-
-        if URL.objects.filter(short_url=value).exists():
-            raise serializers.ValidationError("url with this short url already exists.")
         return value
 
 
