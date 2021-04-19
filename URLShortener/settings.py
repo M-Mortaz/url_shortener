@@ -49,13 +49,13 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+    # 'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'URLShortener.urls'
@@ -172,5 +172,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SHORTENER_MIN_HASH_LENGTH = 5
 
-# The base domain for shorted url.
-BASE_DOMAIN = os.getenv("BASE_DOMAIN", "http://localhost:8000/r1/")
+APPEND_SLASH = True
