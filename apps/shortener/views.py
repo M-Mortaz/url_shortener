@@ -1,6 +1,6 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from apps.shortener.serializers import URLSerializer, UpdateURLSerializer
+from apps.shortener.serializers import URLSerializer, UpdateURLSerializer, VisitCountSerializer
 import logging
 from apps.shortener.models import URL
 from utils import set_url_details_redis, delete_url_details_redis
@@ -44,3 +44,16 @@ class URLShortenerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIVie
     def perform_destroy(self, instance):
         instance.delete()
         delete_url_details_redis(short_url=instance.short_url)
+
+
+class RetrieveVisitCountURLView(generics.RetrieveAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = VisitCountSerializer
+    queryset = URL.objects.all()
+    lookup_field = "short_url"
+    lookup_url_kwarg = "short_url"
+
+
+class RetrieveVisitCountIDView(RetrieveVisitCountURLView):
+    lookup_field = "id"
+    lookup_url_kwarg = "url_id"

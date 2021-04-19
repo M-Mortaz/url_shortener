@@ -20,7 +20,7 @@ from django.conf import settings
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/v1/url_shortener/', include('apps.shortener.urls')),
-    url(r'^r1/', include('apps.redirect.urls')),  # r1 means redirect v1
+    url(r'^api/v1/r/', include('apps.redirect.urls')),  # r means redirect
 ]
 
 if settings.DEBUG:

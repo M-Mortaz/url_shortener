@@ -48,3 +48,9 @@ class UpdateURLSerializer(URLSerializer):
         fields = URLSerializer.Meta.fields
         read_only_fields = ("created_at", "update_at",)
 
+
+class VisitCountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = URL
+        fields = ("visit_count", )
+
