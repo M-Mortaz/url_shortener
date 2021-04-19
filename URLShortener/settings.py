@@ -83,7 +83,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 30
 }
 
-CELERY_BROKER_URL = os.getenv('URL_SHORTENER_CELERY_BROKER_URL', 'amqp://url_shortener:url_shortener@localhost:5672/')
+CELERY_BROKER_URL = os.getenv('URL_SHORTENER_CELERY_BROKER_URL', 'amqp://url_shortener:url_shortener@rabbit:5672/')
 REDIS_PORT = 6379
 REDIS_DB = 0
 REDIS_HOST = os.environ.get('REDIS_PORT_6379_TCP_ADDR', 'redis')
