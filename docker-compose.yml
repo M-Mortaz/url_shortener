@@ -40,7 +40,21 @@ services:
     depends_on:
       - django
 
+  redis:
+    image: redis
+    hostname: redis
 
+
+  # RabbitMQ - queue
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=url_shortener
+      - RABBITMQ_DEFAULT_PASS=url_shortener
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 volumes:
   keys_root:
   pgdata:

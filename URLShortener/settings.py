@@ -83,9 +83,12 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 30
 }
 
-CELERY_BROKER_URL = os.getenv('URL_SHORTENER_CELERY_BROKER_URL',
-                              'amqp://url_shortener:url_shortener@localhost:5672/url_shortener_vhost')
-CELERY_RESULT_BACKEND = os.getenv('URL_SHORTENER_CELERY_RESULT_BACKEND', 'redis://localhost')
+CELERY_BROKER_URL = os.getenv('URL_SHORTENER_CELERY_BROKER_URL', 'amqp://url_shortener:url_shortener@localhost:5672/')
+REDIS_PORT = 6379
+REDIS_DB = 0
+REDIS_HOST = os.environ.get('REDIS_PORT_6379_TCP_ADDR', 'redis')
+CELERY_RESULT_BACKEND = 'redis://%s:%d/%d' % (REDIS_HOST, REDIS_PORT, REDIS_DB)
+
 
 CORS_ORIGIN_WHITELIST = (
     'http://google.com',  # example
