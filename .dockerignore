@@ -1,0 +1,13 @@
+.git
+env
+venv
+*.log
+*.sqlite
+db
+__pycache__
+.vscode
+.idea
+*.md
+*.yml
+media
+
