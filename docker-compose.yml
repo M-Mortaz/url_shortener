@@ -1,0 +1,62 @@
+version: '3'
+services:
+  django:
+    container_name: URLShortener
+    build: .
+    restart: always
+    command: /bin/bash /dockerize_conf/django_entry_point.sh
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./static:/static
+      - /docker/url_shortener/logs/uwsgi:/logs/uwsgi
+      - /docker/url_shortener/logs/django:/logs/django
+      - uwsgi_socket:/socket
+    depends_on:
+      - db
+
+  db:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    networks:
+      global-network:
+        ipv4_address: 172.30.1.10
+
+
+  nginx:
+    container_name: nginx-container
+    build: dockerize_conf/nginx
+    restart: always
+    ports:
+      - "80:8080"
+
+    volumes:
+      - uwsgi_socket:/socket
+      - /docker/url_shortener/logs/nginx:/var/log/nginx
+      - ./static:/docker/static
+    networks:
+      global-network:
+        ipv4_address: 172.30.1.11
+    depends_on:
+      - django
+
+
+volumes:
+  keys_root:
+  pgdata:
+  static:
+  media:
+  uwsgi_socket:
+
+networks:
+  global-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.1.0/24
