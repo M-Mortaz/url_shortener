@@ -1,7 +1,11 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from apps.shortener.serializers import URLSerializer, UpdateURLSerializer
+import logging
 from apps.shortener.models import URL
+from utils import set_url_details_redis, delete_url_details_redis
+
+logger = logging.getLogger()
 
 
 class URLShortenerCreateListView(generics.ListCreateAPIView):
@@ -28,3 +32,15 @@ class URLShortenerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIVie
 
     def get_serializer_context(self):
         return {"url_id": self.kwargs["url_id"]}
+
+    def perform_update(self, serializer):
+        url = serializer.save()
+        set_url_details_redis(
+            original_url=url.original_url,
+            short_url=url.short_url,
+            url_id=url.id
+        )
+
+    def perform_destroy(self, instance):
+        instance.delete()
+        delete_url_details_redis(short_url=instance.short_url)
