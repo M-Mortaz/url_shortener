@@ -16,8 +16,8 @@ services:
       - db
 
   db:
-    container_name: postgres
-    image: pg_container
+    container_name: pg_container
+    image: postgres
     environment:
       POSTGRES_PASSWORD: postgres
     ports:

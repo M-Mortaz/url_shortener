@@ -110,7 +110,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.getenv("URL_SHORTENER_PG_NAME", "postgres"),
         'USER': os.getenv("URL_SHORTENER_PG_USER", "postgres"),
-        'HOST': os.getenv("URL_SHORTENER_PG_HOST", "localhost"),
+        'HOST': os.getenv("URL_SHORTENER_PG_HOST", "db"),
         'PASSWORD': os.getenv("URL_SHORTENER_PG_PASSWORD", "postgres"),
         'PORT': os.getenv("URL_SHORTENER_PG_PORT", 5432)
     }
