@@ -9,8 +9,8 @@ services:
       - "8000:8000"
     volumes:
       - ./static:/static
-      - /docker/url_shortener/logs/uwsgi:/logs/uwsgi
-      - /docker/url_shortener/logs/django:/logs/django
+      - /docker_URLSH/url_shortener/logs/uwsgi:/logs/uwsgi
+      - /docker_URLSH/url_shortener/logs/django:/logs/django
       - uwsgi_socket:/socket
     depends_on:
       - db
@@ -24,9 +24,6 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data/
-    networks:
-      global-network:
-        ipv4_address: 172.30.1.10
 
 
   nginx:
@@ -38,11 +35,8 @@ services:
 
     volumes:
       - uwsgi_socket:/socket
-      - /docker/url_shortener/logs/nginx:/var/log/nginx
-      - ./static:/docker/static
-    networks:
-      global-network:
-        ipv4_address: 172.30.1.11
+      - /docker_URLSH/url_shortener/logs/nginx:/var/log/nginx
+      - ./static:/docker_URLSH/static
     depends_on:
       - django
 
@@ -53,10 +47,3 @@ volumes:
   static:
   media:
   uwsgi_socket:
-
-networks:
-  global-network:
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.30.1.0/24
